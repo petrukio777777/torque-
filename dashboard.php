@@ -101,7 +101,7 @@ include_once 'includes/header.php';
     <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px;">
         <a href="veiculos/cadastrar.php" style="padding: 10px 20px; background-color: #0F4C5C; color: white; text-decoration: none; border-radius: 5px;">+ Novo Veículo</a>
         <a href="orcamento/cadastrar.php" style="padding: 10px 20px; background-color: #F28C28; color: white; text-decoration: none; border-radius: 5px;">+ Novo Orçamento</a>
-        <a href="servicos/cadastrar.php" style="padding: 10px 20px; background-color: #123B4A; color: white; text-decoration: none; border-radius: 5px;">+ Novo Serviço</a>
+        <a href="servicos/listar.php" style="padding: 10px 20px; background-color: #123B4A; color: white; text-decoration: none; border-radius: 5px;">Veja nossos serviços</a>
     </div>
 </div>
 

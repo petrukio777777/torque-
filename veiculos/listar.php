@@ -11,9 +11,11 @@ $mensagem = "";
 // Verifica se o usuário clicou em Excluir
 if (isset($_GET['excluir'])) {
     $id_excluir = $_GET['excluir'];
-    // Prepara a exclusão (o ON DELETE CASCADE no banco vai apagar os orçamentos desse carro também)
-    $stmt = $conn->prepare("DELETE FROM veiculos WHERE id = ?");
-    $stmt->bind_param("i", $id_excluir);
+    $id_usuario = $_SESSION['usuario_id'];
+    
+    // Só exclui se o carro for do usuário logado
+    $stmt = $conn->prepare("DELETE FROM veiculos WHERE id = ? AND usuario_id = ?");
+    $stmt->bind_param("ii", $id_excluir, $id_usuario);
 
     if ($stmt->execute()) {
         $mensagem = "<div class='sucesso' style='color: green;'>Veículo excluído com sucesso!</div>";
@@ -23,8 +25,8 @@ if (isset($_GET['excluir'])) {
     $stmt->close();
 }
 
-// Busca todos os veículos do banco
-$sql = "SELECT * FROM veiculos ORDER BY id DESC";
+$id_usuario = $_SESSION['usuario_id'];
+$sql = "SELECT * FROM veiculos WHERE usuario_id = $id_usuario ORDER BY id DESC";
 $resultado = $conn->query($sql);
 
 include_once '../includes/header.php';

@@ -2,6 +2,12 @@
 session_start();
 require_once '../config/conexao.php';
 
+
+if (isset($_SESSION['mensagem_sucesso'])) {
+    $mensagem = "<div class='sucesso'>" . $_SESSION['mensagem_sucesso'] . "</div>";
+    unset($_SESSION['mensagem_sucesso']);
+}
+
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: ../usuarios/login.php");
     exit;
@@ -10,7 +16,7 @@ if (!isset($_SESSION['usuario_id'])) {
 $mensagem = "";
 
 // 1. PROCESSAR A APROVAÇÃO OU RECUSA
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['acao']) && isset($_POST['orcamento_id'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] == 'funcionario') {
     $orcamento_id = $_POST['orcamento_id'];
     $nova_acao = $_POST['acao'];
 
@@ -46,6 +52,7 @@ include_once '../includes/header.php';
 <h2>Meus Orçamentos</h2>
 <?php echo $mensagem; ?>
 
+
 <div style="margin-bottom: 20px;">
     <a href="cadastrar.php" class="btn">+ Novo Orçamento</a>
 </div>
@@ -78,26 +85,35 @@ include_once '../includes/header.php';
                                 <span class="badge pendente">PENDENTE</span>
                             <?php elseif ($row['status'] == 'aprovado'): ?>
                                 <span class="badge aprovado">APROVADO</span>
+                            <?php elseif ($row['status'] == 'em_andamento'): ?>
+                                <span class="badge" style="background:#cce5ff; color:#004085;">EM ANDAMENTO</span>
+                            <?php elseif ($row['status'] == 'concluido'): ?>
+                                <span class="badge" style="background:#155724; color:white;">CONCLUÍDO</span>
                             <?php else: ?>
                                 <span class="badge recusado">RECUSADO</span>
                             <?php endif; ?>
                         </td>
 
                         <td>
-                            <?php if ($row['status'] == 'pendente'): ?>
-                                <form action="listar.php" method="POST" style="display: inline-block;">
-                                    <input type="hidden" name="orcamento_id" value="<?= $row['id'] ?>">
-                                    <input type="hidden" name="acao" value="aprovado">
-                                    <button type="submit" class="btn" style="background-color: #28a745; padding: 5px 10px; font-size: 13px;">Aprovar</button>
-                                </form>
-
-                                <form action="listar.php" method="POST" style="display: inline-block;">
-                                    <input type="hidden" name="orcamento_id" value="<?= $row['id'] ?>">
-                                    <input type="hidden" name="acao" value="recusado">
-                                    <button type="submit" class="btn" style="background-color: #dc3545; padding: 5px 10px; font-size: 13px;">Recusar</button>
-                                </form>
+                            <?php if ($_SESSION['tipo_usuario'] == 'funcionario'): ?>
+                                <!-- Se for FUNCIONÁRIO: Mostra os botões de ação -->
+                                <?php if ($row['status'] == 'pendente'): ?>
+                                    <form action="listar.php" method="POST" style="display: inline-block;">
+                                        <input type="hidden" name="orcamento_id" value="<?= $row['id'] ?>">
+                                        <input type="hidden" name="acao" value="aprovado">
+                                        <button type="submit" class="btn" style="background:#28a745; padding:5px 10px; font-size:12px;">Aprovar</button>
+                                    </form>
+                                    <form action="listar.php" method="POST" style="display: inline-block;">
+                                        <input type="hidden" name="orcamento_id" value="<?= $row['id'] ?>">
+                                        <input type="hidden" name="acao" value="recusado">
+                                        <button type="submit" class="btn" style="background:#dc3545; padding:5px 10px; font-size:12px;">Recusar</button>
+                                    </form>
+                                <?php else: ?>
+                                    <em style="color: #888;">Finalizado</em>
+                                <?php endif; ?>
                             <?php else: ?>
-                                <em style="color: #888;">Concluído</em>
+                                <!-- Se for CLIENTE: Apenas um traço -->
+                                <em style="color: #888;">-</em>
                             <?php endif; ?>
                         </td>
                     </tr>

@@ -3,7 +3,7 @@ session_start();
 require_once '../config/conexao.php';
 
 // PROTEÇÃO
-if(!isset($_SESSION['usuario_id'])) {
+if (!isset($_SESSION['usuario_id'])) {
     header("Location: ../usuarios/login.php");
     exit;
 }
@@ -13,8 +13,8 @@ $mensagem = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $veiculo_id = $_POST['veiculo_id'];
     // Verifica se algum serviço foi selecionado
-    $servicos_selecionados = isset($_POST['servicos']) ? $_POST['servicos'] : []; 
-    
+    $servicos_selecionados = isset($_POST['servicos']) ? $_POST['servicos'] : [];
+
     if (empty($servicos_selecionados)) {
         $mensagem = "<div class='erro'>Selecione pelo menos um serviço.</div>";
     } else {
@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $conn->prepare("INSERT INTO orcamentos (veiculo_id, valor_total) VALUES (?, ?)");
         $valor_inicial = 0;
         $stmt->bind_param("id", $veiculo_id, $valor_inicial);
-        
+
         if ($stmt->execute()) {
             $orcamento_id = $conn->insert_id;
             $stmt->close();
@@ -51,7 +51,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt_update->execute();
             $stmt_update->close();
 
-            $mensagem = "<div class='sucesso'>Orçamento criado com sucesso! Valor Total: R$ " . number_format($valor_total, 2, ',', '.') . "</div>";
+            $$_SESSION['mensagem_sucesso'] = "Orçamento criado com sucesso! Valor Total: R$ " . number_format($valor_total, 2, ',', '.');
+            header("Location: listar.php");
+            exit;
         } else {
             $mensagem = "<div class='erro'>Erro ao criar orçamento: " . $stmt->error . "</div>";
         }
@@ -72,12 +74,12 @@ include_once '../includes/header.php';
 <?php echo $mensagem; ?>
 
 <form action="cadastrar.php" method="POST" style="display: flex; flex-direction: column; max-width: 500px; gap: 15px;">
-    
+
     <div>
         <label>Veículo:</label>
         <select name="veiculo_id" required style="margin-top: 5px;">
             <option value="">Selecione o veículo...</option>
-            <?php while($v = $veiculos->fetch_assoc()): ?>
+            <?php while ($v = $veiculos->fetch_assoc()): ?>
                 <option value="<?= $v['id'] ?>"><?= htmlspecialchars($v['modelo']) ?> - <?= htmlspecialchars($v['placa']) ?></option>
             <?php endwhile; ?>
         </select>
@@ -86,7 +88,7 @@ include_once '../includes/header.php';
     <div>
         <label>Selecione os Serviços:</label>
         <div style="background: #fafafa; border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; max-height: 200px; overflow-y: auto; margin-top: 5px;">
-            <?php while($s = $servicos->fetch_assoc()): ?>
+            <?php while ($s = $servicos->fetch_assoc()): ?>
                 <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-weight: normal; cursor: pointer;">
                     <!-- Os checkboxes usam name="servicos[]" para enviar um array de IDs -->
                     <input type="checkbox" name="servicos[]" value="<?= $s['id'] ?>" data-valor="<?= $s['valor'] ?>" class="checkbox-servico" style="width: 20px; height: 20px; cursor: pointer;">
@@ -105,27 +107,30 @@ include_once '../includes/header.php';
 </form>
 
 <script>
-// Script para calcular o total sempre que um checkbox for marcado/desmarcado
-document.addEventListener('DOMContentLoaded', function() {
-    const checkboxes = document.querySelectorAll('.checkbox-servico');
-    const inputTotal = document.getElementById('valor_total');
+    // Script para calcular o total sempre que um checkbox for marcado/desmarcado
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkboxes = document.querySelectorAll('.checkbox-servico');
+        const inputTotal = document.getElementById('valor_total');
 
-    function calcularTotal() {
-        let total = 0;
+        function calcularTotal() {
+            let total = 0;
+            checkboxes.forEach(function(checkbox) {
+                if (checkbox.checked) {
+                    total += parseFloat(checkbox.getAttribute('data-valor'));
+                }
+            });
+            // Formata o valor para o padrão brasileiro (ex: 1.200,50)
+            inputTotal.value = total.toLocaleString('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        // Adiciona o evento de "change" (quando muda o estado) em cada checkbox
         checkboxes.forEach(function(checkbox) {
-            if (checkbox.checked) {
-                total += parseFloat(checkbox.getAttribute('data-valor'));
-            }
+            checkbox.addEventListener('change', calcularTotal);
         });
-        // Formata o valor para o padrão brasileiro (ex: 1.200,50)
-        inputTotal.value = total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-
-    // Adiciona o evento de "change" (quando muda o estado) em cada checkbox
-    checkboxes.forEach(function(checkbox) {
-        checkbox.addEventListener('change', calcularTotal);
     });
-});
 </script>
 
 <?php include_once '../includes/footer.php'; ?>

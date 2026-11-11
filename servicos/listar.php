@@ -33,7 +33,11 @@ include_once '../includes/header.php';
 <h2>Serviços Oferecidos</h2>
 <?php echo $mensagem; ?>
 
-<a href="cadastrar.php" style="display: inline-block; margin-bottom: 15px; padding: 10px; background-color: #0F4C5C; color: white; text-decoration: none;">+ Adicionar Novo Serviço</a>
+<?php if ($_SESSION['tipo_usuario'] == 'funcionario'): ?>
+    <div style="margin-bottom: 20px;">
+        <a href="cadastrar.php" class="btn">+ Adicionar Novo Serviço</a>
+    </div>
+<?php endif; ?>
 <div class="table-container">
     <table>
         <thead>
@@ -42,7 +46,7 @@ include_once '../includes/header.php';
                 <th>Nome</th>
                 <th>Descrição</th>
                 <th>Valor Base</th>
-                <th>Ações</th>
+                <?php if ($_SESSION['tipo_usuario'] == 'funcionario'): ?> <th>Ações</th> <?php endif; ?>
             </tr>
         </thead>
         <tbody>
@@ -54,8 +58,12 @@ include_once '../includes/header.php';
                         <td><?= htmlspecialchars($row['descricao']) ?></td>
                         <td>R$ <?= number_format($row['valor'], 2, ',', '.') ?></td>
                         <td>
-                            <a href="editar.php?id=<?= $row['id'] ?>" class="action-link edit">Editar</a> |
-                            <a href="listar.php?excluir=<?= $row['id'] ?>" class="action-link delete" onclick="return confirm('Tem certeza que deseja excluir este serviço?');">Excluir</a>
+                            <?php if ($_SESSION['tipo_usuario'] == 'funcionario'): ?>
+                                <a href="editar.php?id=<?= $row['id'] ?>" class="action-link edit">Editar</a> |
+                                <a href="listar.php?excluir=<?= $row['id'] ?>" class="action-link delete" onclick="return confirm('Excluir?');">Excluir</a>
+                            <?php else: ?>
+                                <em style="color: #888;">-</em>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php endwhile; ?>
