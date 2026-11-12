@@ -33,11 +33,30 @@ include_once '../includes/header.php';
 <h2>Serviços Oferecidos</h2>
 <?php echo $mensagem; ?>
 
-<?php if ($_SESSION['tipo_usuario'] == 'funcionario'): ?>
-    <div style="margin-bottom: 20px;">
-        <a href="cadastrar.php" class="btn">+ Adicionar Novo Serviço</a>
+<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 25px;">
+    
+    <!-- Lado Esquerdo: Voltar e Adicionar (só para admin) -->
+    <div style="display: flex; gap: 10px; align-items: center;">
+        <a href="../dashboard.php" class="btn" style="background-color: #6c757d; padding: 10px 15px; font-size: 14px; text-decoration: none; display: inline-block; margin: 0;">← Voltar ao Menu</a>
+        
+        <!-- O botão de Adicionar só aparece se for funcionário -->
+        <?php if(isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] == 'funcionario'): ?>
+            <a href="cadastrar.php" class="btn" style="margin: 0;">+ Adicionar Novo Serviço</a>
+        <?php endif; ?>
     </div>
-<?php endif; ?>
+
+    <!-- Lado Direito: Formulário de Filtro (opcional, mas deixa profissional) -->
+    <form action="listar.php" method="GET" style="display: flex; gap: 0; margin: 0; padding: 0; box-shadow: none; background: transparent; max-width: 100%;">
+        <input type="text" name="filtro" placeholder="Buscar serviço..." value="<?= htmlspecialchars($_GET['filtro'] ?? '') ?>" style="margin: 0; border-radius: 6px 0 0 6px; border-right: none; width: 250px; padding: 10px 15px;">
+        <button type="submit" style="background-color: #F28C28; margin: 0; border-radius: 0 6px 6px 0; padding: 10px 20px;">Buscar</button>
+        <?php if(isset($_GET['filtro']) && $_GET['filtro'] != ''): ?>
+            <a href="listar.php" style="color: #dc3545; text-decoration: none; font-weight: bold; margin-left: 15px; display: flex; align-items: center;">Limpar</a>
+        <?php endif; ?>
+    </form>
+</div>
+
+<?php echo $mensagem; ?>
+
 <div class="table-container">
     <table>
         <thead>

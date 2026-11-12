@@ -339,3 +339,92 @@ tr:hover td {
     border-radius: 8px;
     margin-bottom: 25px;
 }   
+
+/* =========================================
+   RESPONSIVIDADE (CELULAR E TABLET)
+========================================= */
+@media (max-width: 768px) {
+    /* 1. Ajuste do Cabeçalho (Menu do Topo) */
+    header {
+        flex-direction: column; /* Coloca o logo em cima e o menu embaixo */
+        padding: 15px;
+        gap: 15px;
+    }
+
+    header nav {
+        flex-direction: row;
+        flex-wrap: wrap; /* Permite que os links quebrem em várias linhas */
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+    }
+
+    header nav a {
+        font-size: 14px;
+        padding: 5px 8px;
+    }
+
+    /* Área do usuário (Olá, admin | Sair) fica centralizada na parte de baixo */
+    .user-info {
+        width: 100%;
+        justify-content: center;
+        margin-left: 0;
+        padding-left: 0;
+        border-left: none;
+        border-top: 1px solid rgba(255,255,255,0.3);
+        padding-top: 10px;
+        margin-top: 5px;
+    }
+
+    /* 2. Ajuste do Container Principal */
+    main {
+        margin: 20px auto;
+        padding: 0 10px;
+    }
+
+    h2 {
+        font-size: 22px;
+    }
+
+    /* 3. Ajuste dos Cards do Dashboard (Fica 1 embaixo do outro) */
+    .dashboard-grid, .admin-grid {
+        grid-template-columns: 1fr; /* Uma coluna só */
+        gap: 15px;
+    }
+
+    /* 4. Ajuste dos Formulários e Botões */
+    form {
+        padding: 20px;
+        width: 100%;
+    }
+
+    /* Deixa os botões de ação lado a lado ocupando a tela toda */
+    .btn, button {
+        width: 100%; 
+        text-align: center;
+    }
+    
+    /* Exceção para os botões dentro das tabelas (Editar/Excluir) não ficarem enormes */
+    table .btn, table button {
+        width: auto;
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+
+    /* 5. O Segredo para as Tabelas no Celular */
+    .table-container {
+        overflow-x: auto; /* Permite rolar para o lado */
+        -webkit-overflow-scrolling: touch; /* Rolagem suave no iOS */
+    }
+    
+    table {
+        min-width: 600px; /* Força a tabela a ter um tamanho mínimo para não amassar os textos */
+    }
+}
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza na horizontal */
+    justify-content: center;
+    width: 100%;
+}

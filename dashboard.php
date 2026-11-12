@@ -69,7 +69,7 @@ include_once 'includes/header.php';
 
 <div class="boas-vindas">
     
-    <h1 style="color: white; font-size: 28px; margin-bottom: 10px;">Olá, <?= htmlspecialchars($_SESSION['usuario_nome']) ?>! 👋</h1>
+    <h1 style="color: white; font-size: 28px; margin-bottom: 10px;">Olá, <?= htmlspecialchars($_SESSION['usuario_nome']) ?>!</h1>
     <p style="color: white;">Bem-vindo ao painel de controle do seu Torque+. Aqui está o resumo do seu sistema hoje.</p>
 </div>
 

@@ -24,7 +24,7 @@
 
                     <!-- Se for funcionário, mostra o atalho do painel -->
                     <?php if ($_SESSION['tipo_usuario'] == 'funcionario'): ?>
-                        <a href="../admin/dash.php" style="color: #F28C28; font-weight: bold; margin-left: 10px; text-decoration: none;">⚙️ Painel Admin</a>
+                        <a href="../admin/dash.php" style="color: #F28C28; font-weight: bold; margin-left: 10px; text-decoration: none;"> Painel Admin</a>
                     <?php endif; ?>
 
                     <a href="../usuarios/logout.php" class="btn-sair" style="margin-left: 15px;">Sair</a>

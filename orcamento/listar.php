@@ -31,6 +31,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['tipo_usuario']) && 
     $stmt->close();
 }
 
+// Lógica do Filtro
+$filtro = isset($_GET['filtro']) ? $_GET['filtro'] : '';
+$where_extra = "";
+
+if ($filtro != '') {
+    // Filtra pelo modelo do carro, placa ou nome do serviço
+    $filtro_seguro = $conn->real_escape_string($filtro);
+    $where_extra = " AND (v.modelo LIKE '%$filtro_seguro%' OR v.placa LIKE '%$filtro_seguro%' OR s.nome LIKE '%$filtro_seguro%')";
+}
+
 // 2. BUSCAR ORÇAMENTOS (Com GROUP_CONCAT para juntar os serviços)
 $id_usuario = $_SESSION['usuario_id'];
 $sql = "SELECT o.id, o.valor_total, o.status, o.data_criacao, 
@@ -40,7 +50,7 @@ $sql = "SELECT o.id, o.valor_total, o.status, o.data_criacao,
         JOIN veiculos v ON o.veiculo_id = v.id
         LEFT JOIN orcamento_itens oi ON o.id = oi.orcamento_id
         LEFT JOIN servicos s ON oi.servico_id = s.id
-        WHERE v.usuario_id = $id_usuario
+        WHERE v.usuario_id = $id_usuario $where_extra
         GROUP BY o.id
         ORDER BY o.data_criacao DESC";
 
@@ -52,10 +62,26 @@ include_once '../includes/header.php';
 <h2>Meus Orçamentos</h2>
 <?php echo $mensagem; ?>
 
+<!-- Barra de Ferramentas (Ações e Filtro) -->
+<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 25px;">
+    
+    <!-- Lado Esquerdo: Voltar e Novo -->
+    <div style="display: flex; gap: 10px; align-items: center;">
+        <a href="../dashboard.php" class="btn" style="background-color: #6c757d; padding: 10px 15px; font-size: 14px; text-decoration: none; display: inline-block; margin: 0;">← Voltar ao Menu</a>
+        <a href="cadastrar.php" class="btn" style="margin: 0;">+ Novo Orçamento</a>
+    </div>
 
-<div style="margin-bottom: 20px;">
-    <a href="cadastrar.php" class="btn">+ Novo Orçamento</a>
+    <!-- Lado Direito: Formulário de Filtro -->
+    <form action="listar.php" method="GET" style="display: flex; gap: 0; margin: 0; padding: 0; box-shadow: none; background: transparent; max-width: 100%;">
+        <input type="text" name="filtro" placeholder="Filtrar por veículo, placa ou serviço..." value="<?= htmlspecialchars($filtro ?? '') ?>" style="margin: 0; border-radius: 6px 0 0 6px; border-right: none; width: 300px; padding: 10px 15px;">
+        <button type="submit" style="background-color: #F28C28; margin: 0; border-radius: 0 6px 6px 0; padding: 10px 20px;">Filtrar</button>
+        <?php if(isset($filtro) && $filtro != ''): ?>
+            <a href="listar.php" style="color: #dc3545; text-decoration: none; font-weight: bold; margin-left: 15px; display: flex; align-items: center;">Limpar</a>
+        <?php endif; ?>
+    </form>
 </div>
+
+<?php echo $mensagem; ?>
 
 <div class="table-container">
     <table>

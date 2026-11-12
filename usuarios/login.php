@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $resultado = $stmt->get_result();
-   
+
     if ($resultado->num_rows === 1) {
         $usuario = $resultado->fetch_assoc();
 
@@ -52,19 +52,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 include_once '../includes/header.php';
 ?>
 
-<h2>Login no Torque+</h2>
-<?php echo $mensagem; ?>
+<div class="login-container">
+    <h2>Login no Torque+</h2>
 
-<form action="login.php" method="POST" style="display: flex; flex-direction: column; max-width: 400px; gap: 10px;">
-    <label>E-mail:</label>
-    <input type="email" name="email" required>
+    <?php echo $mensagem; ?>
 
-    <label>Senha:</label>
-    <input type="password" name="senha" required>
+    <form action="login.php" method="POST" style="display: flex; flex-direction: column; width: 100%; max-width: 400px; gap: 15px;">
+        <label>E-mail:</label>
+        <input type="email" name="email" required>
 
-    <button type="submit" style="margin-top: 10px; cursor: pointer;">Entrar</button>
-</form>
+        <label>Senha:</label>
+        <input type="password" name="senha" required>
 
-<p style="margin-top: 15px;">Ainda não tem conta? <a href="cadastrar.php">Cadastre-se aqui</a></p>
+
+        <button type="submit">Entrar</button>
+    </form>
+
+    <p style="margin-top: 20px;">Ainda não tem conta? <a href="cadastrar.php">Cadastre-se aqui</a></p>
+</div>
 
 <?php include_once '../includes/footer.php'; ?>

@@ -35,9 +35,19 @@ include_once '../includes/header.php';
 <h2>Meus Veículos</h2>
 <?php echo $mensagem; ?>
 
-<div style="margin-bottom: 20px;">
-    <a href="cadastrar.php" class="btn">+ Adicionar Novo Veículo</a>
+<!-- Barra de Ferramentas (Ações e Filtro) -->
+<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 25px;">
+
+    <!-- Lado Esquerdo: Voltar e Novo -->
+    <div style="display: flex; gap: 10px; align-items: center;">
+        <a href="../dashboard.php" class="btn" style="background-color: #6c757d; padding: 10px 15px; font-size: 14px; text-decoration: none; display: inline-block; margin: 0;">← Voltar ao Menu</a>
+        <a href="cadastrar.php" class="btn" style="margin: 0;">+ Adicionar novo veiculo</a>
+    </div>
+
 </div>
+
+<?php echo $mensagem; ?>
+
 <div class="table-container">
     <table>
         <thead>
