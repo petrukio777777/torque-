@@ -107,12 +107,14 @@ h2 {
     font-size: 26px;
     position: relative;
     padding-bottom: 8px;
+    text-align: center; /* Centraliza o texto */
 }
 
 h2::after {
     content: '';
     position: absolute;
-    left: 0;
+    left: 50%; /* Move o início da linha para o meio */
+    transform: translateX(-50%); /* Puxa a linha para trás para centralizar perfeitamente */
     bottom: 0;
     width: 60px;
     height: 3px;
@@ -393,11 +395,22 @@ tr:hover td {
     }
 
     /* 4. Ajuste dos Formulários e Botões */
-    form {
-        padding: 20px;
-        width: 100%;
-    }
+    form       {
+    margin: 0 auto 25px auto; /* Centraliza o form e mantém a margem inferior */
+}
 
+/* Centralizar o título (h2) nas páginas de cadastro */
+main > h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Centralizar o botão de voltar (aquele cinza) */
+main > div > a.btn[href*="listar.php"] {
+    display: block;
+    margin: 0 auto 20px auto;
+    width: fit-content;
+}
     /* Deixa os botões de ação lado a lado ocupando a tela toda */
     .btn, button {
         width: 100%; 

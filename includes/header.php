@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Torque+ | Painel</title>
+    <link rel="icon" type="image/png" href="../img/jonata_Wrench.png">
     <link rel="stylesheet" href="../css/style.css">
 </head>
 
