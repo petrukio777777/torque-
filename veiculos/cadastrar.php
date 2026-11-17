@@ -64,8 +64,6 @@ include_once '../includes/header.php';
         <input type="text" name="cor" required>
 
         <button type="submit">Salvar Veículo</button>
-
-        <button type="submit" style="margin-top: 10px; cursor: pointer;">Salvar Veículo</button>
     </form>
 </div>
 

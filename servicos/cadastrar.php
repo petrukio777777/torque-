@@ -38,11 +38,9 @@ include_once '../includes/header.php';
         <a href="listar.php" class="btn" style="background-color: #6c757d; padding: 8px 15px; font-size: 14px; text-decoration: none; display: inline-block;">← Voltar para Serviços</a>
     </div>
 
-    <div style="width: 100%; max-width: 500px; margin-bottom: 20px;">
+     <div style="width: 100%; max-width: 500px; margin-bottom: 20px; text-align: center;">
         <?php echo $mensagem; ?>
     </div>
-
-    <?php echo $mensagem; ?>
 
     <form action="cadastrar.php" method="POST" style="display: flex; flex-direction: column; width: 100%; max-width: 500px; gap: 15px; margin: 0 auto;">
         <label>Nome do Serviço (ex: Troca de Óleo):</label>
@@ -56,7 +54,6 @@ include_once '../includes/header.php';
 
         <button type="submit" style="margin-top: 10px; cursor: pointer;">Salvar Serviço</button>
 
-        <button type="submit" style="margin-top: 10px; cursor: pointer;">Salvar Serviço</button>
     </form>
 </div>
 
